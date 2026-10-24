@@ -1,0 +1,267 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User account and profile in the YouTube Automation Factory",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "creator", "editor", "viewer"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["email"]
+    },
+    "Channel": {
+      "title": "Channel",
+      "description": "YouTube channel configuration and workspace",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "channelId": { "type": "string" },
+        "niche": { "type": "string" },
+        "targetAudience": { "type": "string" },
+        "preferredLanguage": { "type": "string" },
+        "defaultFormat": { "type": "string", "enum": ["longform", "shorts", "livestream"] },
+        "brandVoice": { "type": "string" },
+        "visualIdentity": { "type": "string" },
+        "connected": { "type": "boolean" },
+        "subscribers": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "name", "niche"]
+    },
+    "Project": {
+      "title": "Project",
+      "description": "End-to-end video production project progressing across the pipeline stages",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "channelId": { "type": "string" },
+        "title": { "type": "string" },
+        "stage": {
+          "type": "string",
+          "enum": [
+            "IDEA", "RESEARCH", "OUTLINE", "SCRIPT", "SCRIPT_REVIEW",
+            "VOICEOVER", "VISUAL_ASSETS", "VIDEO_ASSEMBLY", "QUALITY_CHECK",
+            "THUMBNAIL", "SEO_METADATA", "FINAL_REVIEW", "SCHEDULED", "PUBLISHED"
+          ]
+        },
+        "format": { "type": "string", "enum": ["16:9", "9:16", "1:1"] },
+        "targetDuration": { "type": "number" },
+        "priority": { "type": "string", "enum": ["low", "medium", "high", "urgent"] },
+        "scheduledDate": { "type": "string" },
+        "completed": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "channelId", "title", "stage"]
+    },
+    "Idea": {
+      "title": "Idea",
+      "description": "Video concept, working title, and topic research entry",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "channelId": { "type": "string" },
+        "title": { "type": "string" },
+        "hook": { "type": "string" },
+        "category": { "type": "string" },
+        "targetAudience": { "type": "string" },
+        "format": { "type": "string" },
+        "priority": { "type": "string" },
+        "status": { "type": "string", "enum": ["brainstorm", "approved", "rejected", "converted"] },
+        "researchNotes": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "title"]
+    },
+    "Script": {
+      "title": "Script",
+      "description": "Scene-by-scene video script with narration and visual directions",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "projectId": { "type": "string" },
+        "title": { "type": "string" },
+        "hook": { "type": "string" },
+        "format": { "type": "string" },
+        "scenes": { "type": "string" },
+        "callToAction": { "type": "string" },
+        "sourcesNotes": { "type": "string" },
+        "version": { "type": "number" },
+        "approved": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "projectId"]
+    },
+    "Voiceover": {
+      "title": "Voiceover",
+      "description": "TTS voice generation state and scene-by-scene audio references",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "projectId": { "type": "string" },
+        "voiceName": { "type": "string" },
+        "language": { "type": "string" },
+        "audioUrl": { "type": "string" },
+        "duration": { "type": "number" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "projectId"]
+    },
+    "RenderJob": {
+      "title": "RenderJob",
+      "description": "FFmpeg media assembly and video rendering job",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "projectId": { "type": "string" },
+        "status": { "type": "string", "enum": ["queued", "processing", "completed", "failed", "cancelled"] },
+        "progress": { "type": "number" },
+        "aspectRatio": { "type": "string" },
+        "resolution": { "type": "string" },
+        "fps": { "type": "number" },
+        "outputUrl": { "type": "string" },
+        "errorDetails": { "type": "string" },
+        "logs": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "completedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "projectId", "status"]
+    },
+    "Thumbnail": {
+      "title": "Thumbnail",
+      "description": "16:9 thumbnail design, canvas state, and generated artwork",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "projectId": { "type": "string" },
+        "titleText": { "type": "string" },
+        "badgeText": { "type": "string" },
+        "backgroundColor": { "type": "string" },
+        "accentColor": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "prompt": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "projectId"]
+    },
+    "SeoMetadata": {
+      "title": "SeoMetadata",
+      "description": "Optimized YouTube title, tags, description, chapters, and pinned comments",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "projectId": { "type": "string" },
+        "titleOptions": { "type": "string" },
+        "selectedTitle": { "type": "string" },
+        "description": { "type": "string" },
+        "tags": { "type": "string" },
+        "hashtags": { "type": "string" },
+        "chapters": { "type": "string" },
+        "pinnedComment": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "projectId"]
+    },
+    "PublishingJob": {
+      "title": "PublishingJob",
+      "description": "YouTube publication record with human approval gate and schedule",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "projectId": { "type": "string" },
+        "channelId": { "type": "string" },
+        "scheduledFor": { "type": "string" },
+        "privacyStatus": { "type": "string", "enum": ["private", "unlisted", "public"] },
+        "publishStatus": { "type": "string", "enum": ["draft", "awaiting_approval", "scheduled", "publishing", "published", "failed"] },
+        "approvedByHuman": { "type": "boolean" },
+        "youtubeVideoId": { "type": "string" },
+        "errorDetails": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "projectId", "publishStatus"]
+    },
+    "ActivityLog": {
+      "title": "ActivityLog",
+      "description": "Audit record of automation events, AI generation, and state changes",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "action": { "type": "string" },
+        "details": { "type": "string" },
+        "category": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "action", "timestamp"]
+    },
+    "AiUsage": {
+      "title": "AiUsage",
+      "description": "Tracking of model executions, token counts, and cost estimates",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "model": { "type": "string" },
+        "task": { "type": "string" },
+        "tokensEstimated": { "type": "number" },
+        "costEstimated": { "type": "number" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "model", "task"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles and settings"
+    },
+    "/channels/{channelId}": {
+      "schema": "Channel",
+      "description": "User-owned YouTube channels"
+    },
+    "/projects/{projectId}": {
+      "schema": "Project",
+      "description": "Production video projects"
+    },
+    "/ideas/{ideaId}": {
+      "schema": "Idea",
+      "description": "Video topic and brainstorming ideas"
+    },
+    "/scripts/{scriptId}": {
+      "schema": "Script",
+      "description": "Scene scripts for projects"
+    },
+    "/voiceovers/{voiceoverId}": {
+      "schema": "Voiceover",
+      "description": "Voiceover audio jobs"
+    },
+    "/renderJobs/{renderJobId}": {
+      "schema": "RenderJob",
+      "description": "Video assembly render jobs"
+    },
+    "/thumbnails/{thumbnailId}": {
+      "schema": "Thumbnail",
+      "description": "Project thumbnails"
+    },
+    "/seoMetadata/{seoId}": {
+      "schema": "SeoMetadata",
+      "description": "SEO metadata packages"
+    },
+    "/publishingJobs/{publishingJobId}": {
+      "schema": "PublishingJob",
+      "description": "Publishing queue items"
+    },
+    "/activityLogs/{logId}": {
+      "schema": "ActivityLog",
+      "description": "Activity audit logs"
+    },
+    "/aiUsage/{usageId}": {
+      "schema": "AiUsage",
+      "description": "AI usage tracking logs"
+    }
+  }
+}

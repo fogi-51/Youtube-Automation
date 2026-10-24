@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      // Polyfill/enable setter on window.fetch for iframe extensions (e.g. frame_ant)
+      (function() {
+        try {
+          var _origFetch = window.fetch;
+          var _currentFetch = _origFetch;
+          Object.defineProperty(window, 'fetch', {
+            get: function() {
+              return _currentFetch;
+            },
+            set: function(val) {
+              _currentFetch = val;
+            },
+            configurable: true,
+            enumerable: true,
+          });
+        } catch (e) {
+          try {
+            window.fetch = window.fetch;
+          } catch (e2) {}
+        }
+
+        // Intercept and prevent extension-level setter errors from bubbling
+        window.addEventListener('error', function(event) {
+          if (
+            event.message &&
+            (event.message.indexOf('Cannot set property fetch') !== -1 ||
+             event.message.indexOf('has only a getter') !== -1)
+          ) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            return true;
+          }
+        }, true);
+      })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YouTube Automation Factory</title>
+    <meta name="description" content="Production-grade AI video workspace for multi-channel YouTube automation, scriptwriting, voiceover, rendering, SEO, and scheduling." />
+    <meta property="og:title" content="YouTube Automation Factory" />
+    <meta property="og:description" content="Production-grade AI video workspace for multi-channel YouTube automation, scriptwriting, voiceover, rendering, SEO, and scheduling." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

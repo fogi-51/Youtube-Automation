@@ -1,0 +1,91 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper function to verify user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Helper function to verify user owns the document or demo fallback
+    function isAuthorizedUser(userId) {
+      return isAuthenticated() ? request.auth.uid == userId : true;
+    }
+
+    // Users collection
+    match /users/{userId} {
+      allow read: if true;
+      allow write: if isAuthenticated() ? request.auth.uid == userId : true;
+    }
+
+    // Channels collection
+    match /channels/{channelId} {
+      allow read: if true;
+      allow create, update, delete: if true;
+    }
+
+    // Projects collection
+    match /projects/{projectId} {
+      allow read: if true;
+      allow create, update, delete: if true;
+    }
+
+    // Ideas collection
+    match /ideas/{ideaId} {
+      allow read: if true;
+      allow create, update, delete: if true;
+    }
+
+    // Scripts collection
+    match /scripts/{scriptId} {
+      allow read: if true;
+      allow create, update, delete: if true;
+    }
+
+    // Voiceovers collection
+    match /voiceovers/{voiceoverId} {
+      allow read: if true;
+      allow create, update, delete: if true;
+    }
+
+    // Render jobs collection
+    match /renderJobs/{renderJobId} {
+      allow read: if true;
+      allow create, update, delete: if true;
+    }
+
+    // Thumbnails collection
+    match /thumbnails/{thumbnailId} {
+      allow read: if true;
+      allow create, update, delete: if true;
+    }
+
+    // SEO Metadata collection
+    match /seoMetadata/{seoId} {
+      allow read: if true;
+      allow create, update, delete: if true;
+    }
+
+    // Publishing jobs collection
+    match /publishingJobs/{publishingJobId} {
+      allow read: if true;
+      allow create, update, delete: if true;
+    }
+
+    // Activity logs collection
+    match /activityLogs/{logId} {
+      allow read: if true;
+      allow create, update, delete: if true;
+    }
+
+    // AI Usage tracking collection
+    match /aiUsage/{usageId} {
+      allow read: if true;
+      allow create, update, delete: if true;
+    }
+
+    // Connection test document
+    match /test/connection {
+      allow read, write: if true;
+    }
+  }
+}
